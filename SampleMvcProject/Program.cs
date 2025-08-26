@@ -14,6 +14,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ProductDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Register services
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 
