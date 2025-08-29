@@ -13,12 +13,15 @@ namespace SampleMvcProject.WebUI.Controllers
         {
             _productService = productService;
         }
+        // GET: Products
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var items = await _productService.GetAllAsync();
             return View(items);
         }
-
+        // GET: Products/Details/5
+        [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
             var p = await _productService.GetByIdAsync(id);
@@ -28,13 +31,15 @@ namespace SampleMvcProject.WebUI.Controllers
             }
             return View(p);
         }
-
+        // GET: Products/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
-
-        [HttpPost, ValidateAntiForgeryToken]
+        // POST: Products/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductDto productDto)
         {
             if (!ModelState.IsValid) return View(productDto);
@@ -43,7 +48,17 @@ namespace SampleMvcProject.WebUI.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+        // GET: Products/Edit/5
+        [HttpGet]
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _productService.GetByIdAsync(id);
+            if (product == null) return NotFound();
+            return View(product);
+        }
+        // POST: Products/Edit/5
+        [HttpPost]
         public async Task<IActionResult> Edit(int id, ProductDto product)
         {
             if (id != product.Id) return BadRequest();
@@ -54,7 +69,8 @@ namespace SampleMvcProject.WebUI.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
+        // GET: Products/Delete/5
+        [HttpGet]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var p = await _productService.GetByIdAsync(id);
@@ -62,8 +78,9 @@ namespace SampleMvcProject.WebUI.Controllers
             await _productService.DeleteAsync(id);
             return View(p);
         }
-
-        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
+        // POST: Products/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
             _productService.DeleteAsync(id);
